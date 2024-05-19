@@ -102,3 +102,6 @@ const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
+// Exporta la configuración del servidor para Vercel
+module.exports = app;
