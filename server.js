@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
@@ -47,7 +48,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   }
 });
 
-// Ruta para la raíz (opcional, solo para evitar el error "Cannot GET /")
 app.get('/', (req, res) => {
   res.send('Backend del chat en tiempo real');
 });
@@ -103,5 +103,5 @@ server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
-// Exporta la configuración del servidor para Vercel
 module.exports = app;
+module.exports.server = server;
