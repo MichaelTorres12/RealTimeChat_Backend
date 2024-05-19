@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
@@ -103,5 +102,4 @@ server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
-module.exports = app;
-module.exports.server = server;
+module.exports = server;
