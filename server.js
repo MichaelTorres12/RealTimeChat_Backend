@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: '*',
+    origin: 'https://real-time-chat-frontend-bay.vercel.app',
     methods: ["GET", "POST"],
     credentials: true
   },
