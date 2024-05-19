@@ -35,10 +35,15 @@ const upload = multer({ storage });
 
 app.post('/upload', upload.single('image'), (req, res) => {
   if (req.file) {
-    res.json({ imageUrl: `https://your-backend-url.vercel.app/uploads/${req.file.filename}` });
+    res.json({ imageUrl: `https://real-time-chat-backend.vercel.app/uploads/${req.file.filename}` });
   } else {
     res.status(400).send('Error al subir la imagen');
   }
+});
+
+// Ruta para la raíz (opcional, solo para evitar el error "Cannot GET /")
+app.get('/', (req, res) => {
+  res.send('Backend del chat en tiempo real');
 });
 
 const rooms = {};
