@@ -11,10 +11,16 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: '*',
+    methods: ["GET", "POST"],
+    credentials: true
   },
 });
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://real-time-chat-frontend-bay.vercel.app',
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const uploadDir = path.join(__dirname, 'uploads');
