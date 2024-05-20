@@ -103,5 +103,6 @@ io.on('connection', (socket) => {
 //   console.log(`Servidor escuchando en el puerto ${PORT}`);
 // });
 
-module.exports = app;
-module.exports.server = server;
+module.exports = (req, res) => {
+  server.emit('request', req, res);
+};
