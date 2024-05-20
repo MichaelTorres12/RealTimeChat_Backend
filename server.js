@@ -4,30 +4,19 @@ const socketIo = require('socket.io');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: 'https://real-time-chat-frontend-bay.vercel.app',
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: '*',
   },
 });
 
-app.use(cors({
-  origin: 'https://real-time-chat-frontend-bay.vercel.app',
-  methods: ["GET", "POST"],
-  credentials: true
-}));
+app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
+// Configuración de multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -39,19 +28,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Ruta para manejar la subida de imágenes
 app.post('/upload', upload.single('image'), (req, res) => {
   if (req.file) {
-    res.json({ imageUrl: `https://real-time-chat-backend.vercel.app/uploads/${req.file.filename}` });
+    res.json({ imageUrl: `http://localhost:4000/uploads/${req.file.filename}` });
   } else {
     res.status(400).send('Error al subir la imagen');
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Backend del chat en tiempo real');
-});
-
-const rooms = {};
+const rooms = {}; // Almacenamiento en memoria para los mensajes de cada sala
 
 io.on('connection', (socket) => {
   console.log('Nuevo cliente conectado:', socket.id);
@@ -60,6 +46,7 @@ io.on('connection', (socket) => {
     socket.join(room);
     console.log(`${username} se ha unido a la sala ${room}`);
 
+    // Enviar historial de mensajes al nuevo usuario
     if (rooms[room]) {
       socket.emit('message', {
         user: 'admin',
@@ -97,12 +84,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// No se requiere la escucha explícita del puerto
-// const PORT = process.env.PORT || 4000;
-// server.listen(PORT, () => {
-//   console.log(`Servidor escuchando en el puerto ${PORT}`);
-// });
-
-module.exports = (req, res) => {
-  server.emit('request', req, res);
-};
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
