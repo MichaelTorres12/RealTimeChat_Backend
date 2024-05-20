@@ -97,9 +97,10 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+// No se requiere la escucha explícita del puerto
+// const PORT = process.env.PORT || 4000;
+// server.listen(PORT, () => {
+//   console.log(`Servidor escuchando en el puerto ${PORT}`);
+// });
 
-module.exports = server;
+module.exports = app;
